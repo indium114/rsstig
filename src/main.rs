@@ -1,6 +1,6 @@
 use color_eyre::eyre::Result;
 use indicatif::{ProgressBar, ProgressState, ProgressStyle};
-use std::{fmt::Write, time::Duration};
+use std::{fmt::Write, io, time::Duration};
 
 mod opml;
 mod persistence;
@@ -73,6 +73,10 @@ fn main() -> Result<()> {
             }
         }
     }
+
+    println!("All caught up! Press <enter> to exit.");
+    let mut t = String::new();
+    let _ = io::stdin().read_line(&mut t);
 
     Ok(())
 }
