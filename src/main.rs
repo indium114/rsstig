@@ -4,6 +4,7 @@ use std::{fmt::Write, time::Duration};
 
 mod opml;
 mod rss;
+mod tui;
 
 struct Feed {
     name: String,
@@ -24,6 +25,7 @@ fn main() -> Result<()> {
     spinner.finish();
 
     let bar = ProgressBar::new(feed_files.len() as u64);
+    bar.enable_steady_tick(Duration::from_millis(120));
     bar.set_style(ProgressStyle::with_template("{spinner:.green} Fetching feeds [{elapsed_precise}] [{wide_bar:.white}] ({eta})")
         .unwrap()
         .with_key("eta", |state: &ProgressState, w: &mut dyn Write| write!(w, "{:.1}s", state.eta().as_secs_f64()).unwrap())
@@ -45,7 +47,15 @@ fn main() -> Result<()> {
 
     bar.finish();
 
-    // MARK: ui
+    // MARK: run ui
+    'top: for feed in feeds {
+        for (i, entry) in feed.entries.clone().into_iter().enumerate() {
+            match tui::run(feed.name.clone(), entry, i, feed.entries.len()) {
+                true => continue,
+                false => break 'top,
+            }
+        }
+    }
 
     Ok(())
 }
