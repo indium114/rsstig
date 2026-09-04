@@ -10,4 +10,4 @@ feed-rs = "2.4.0"
 markdowndown = "0.1.0"
 opml = "1.1.6"
 ratatui = "0.30.2"
-reqwest = "0.13.4"
+reqwest = { version = "0.13.4", features = ["blocking"] }
