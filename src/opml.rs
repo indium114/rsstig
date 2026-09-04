@@ -1,4 +1,4 @@
-use opml::OPML;
+use opml::{OPML, Outline};
 use std::fs;
 
 fn home() -> String {
@@ -8,8 +8,8 @@ fn home() -> String {
         .unwrap_or_default();
 }
 
-pub fn load_feeds() -> OPML {
+pub fn load_feeds() -> Vec<Outline> {
     let dir = home() + "/.config/rsstig/feeds.opml";
     let file = fs::read_to_string(&dir).expect(&format!("Failed to read {dir}; make sure it exists"));
-    OPML::from_str(&file).expect(&format!("Failed to read {dir}; make sure it is a valid opml file"))
+    OPML::from_str(&file).expect(&format!("Failed to read {dir}; make sure it is a valid opml file")).body.outlines
 }
