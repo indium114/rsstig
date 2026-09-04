@@ -12,7 +12,7 @@ fn main() -> Result<()> {
             "{:#?}",
             rss::get_rss(
                 feed.xml_url
-                    .expect(&format!("Feed {} does not have an xmlUrl", feed.text).to_string())
+                    .unwrap_or_else(|| panic!("{}", format!("Feed {} does not have an xmlUrl", feed.text).to_string()))
             )
         );
     }
