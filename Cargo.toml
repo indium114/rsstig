@@ -11,3 +11,4 @@ markdowndown = "0.1.0"
 opml = "1.1.6"
 ratatui = "0.30.2"
 reqwest = { version = "0.13.4", features = ["blocking"] }
+tokio = { version = "1.53.1", features = ["full"] }

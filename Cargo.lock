@@ -2594,6 +2594,7 @@ dependencies = [
  "opml",
  "ratatui",
  "reqwest 0.13.4",
+ "tokio",
 ]
 
 [[package]]
