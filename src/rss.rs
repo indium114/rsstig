@@ -3,9 +3,9 @@ use markdowndown::{HtmlConverter, convert_url};
 
 #[derive(Debug)]
 pub struct Entry {
-    id: String,
-    title: String,
-    content: String,
+    pub id: String,
+    pub title: String,
+    pub content: String,
 }
 
 async fn get(url: &str) -> String {
