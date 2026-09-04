@@ -4,9 +4,10 @@ use ratatui::{
   DefaultTerminal, Frame,
   crossterm::event::{self, Event, KeyCode, KeyEventKind},
   layout::{Constraint, Direction, Layout},
+  prelude::*,
   style::{Color, Style},
   text::{Line, Span},
-  widgets::{Block, BorderType, Borders, Paragraph, Wrap},
+  widgets::{Block, BorderType, Borders, Paragraph, Wrap, Scrollbar, ScrollbarOrientation, ScrollbarState},
 };
 
 pub fn run(name: String, entry: crate::rss::Entry, current: usize, total_entries: usize) -> bool {
@@ -104,6 +105,21 @@ impl App {
                 .wrap(Wrap { trim: false })
                 .scroll((self.vertical_scroll, 0)),
             master_layout[0]
+        );
+
+        // scrollbar
+        let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .begin_symbol(Some("󱦲"))
+            .end_symbol(Some("󱦳"));
+        let mut scrollbar_state = ScrollbarState::new(self.total_lines)
+            .position(self.vertical_scroll as usize);
+        frame.render_stateful_widget(
+            scrollbar,
+            master_layout[0].inner(Margin {
+                vertical: 1,
+                horizontal: 0,
+            }),
+            &mut scrollbar_state
         )
     }
 
