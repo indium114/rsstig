@@ -5,7 +5,7 @@
 *rsstig* is an unconventional RSS/Atom reader for the terminal, built to solve my frustrations with existing readers. \
 Its name is derived from (and pronounced the same as) 'rustig', the Afrikaans word meaning 'calm' or 'quiet'.
 
-Instead of the typical RSS reader layout of a sidebar on the left with folders of feeds and a main panel where you scroll through articles, *rsstig* takes a different approach inspired by Steam's discovery queue. You advance through new articles with the `l` key (Vim right keybind). If a given article piques your interest, pressing `j` will download the full webpage and show it in the terminal. From there, you can scroll with `j` and `k`. Once you're all caught up, the program will automatically close.
+Instead of the typical RSS reader layout of a sidebar on the left with folders of feeds and a main panel where you scroll through articles, *rsstig* takes a different approach inspired by Steam's discovery queue. You advance through new articles with the `l` key (Vim right keybind). If a given article piques your interest, pressing `j` will download the full webpage and show it in the terminal. From there, you can scroll with `j` and `k`.
 
 ## Installation
 
