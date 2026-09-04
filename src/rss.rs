@@ -6,9 +6,10 @@ pub struct Entry {
     pub id: String,
     pub title: String,
     pub content: String,
+    pub url: String,
 }
 
-async fn get(url: &str) -> String {
+pub async fn get(url: &str) -> String {
     convert_url(url).await.unwrap().to_string()
 }
 
@@ -28,6 +29,7 @@ pub fn get_rss(url: String) -> Vec<Entry> {
                 Some(s) => HtmlConverter::default().convert_html(&s.content).unwrap(),
                 None => "<No summary>".to_string(),
             },
+            url: e.links[0].href.clone(),
         })
         .collect()
 }

@@ -23,6 +23,7 @@ struct App {
     feed_name: String,
     entry_name: String,
     content: String,
+    url: String,
     full: bool,
     current: usize,
     total_entries: usize,
@@ -37,6 +38,7 @@ impl App {
             feed_name: name,
             entry_name: entry.title,
             content: entry.content,
+            url: entry.url,
             full: false,
             current,
             total_entries,
@@ -114,6 +116,11 @@ impl App {
                 KeyCode::Char('q') => {
                     self.running = false;
                     return false;
+                }
+                KeyCode::Char('j') if !self.full => {
+                    let rt = tokio::runtime::Runtime::new().unwrap();
+                    self.content = rt.block_on(crate::rss::get(&self.url.clone()));
+                    self.full = true;
                 }
                 _ => (),
             }
