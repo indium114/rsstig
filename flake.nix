@@ -35,7 +35,6 @@
             rust-analyzer
             clippy
             pkg-config
-            openssl
           ];
         };
 
