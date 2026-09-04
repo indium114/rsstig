@@ -86,6 +86,12 @@ impl App {
             master_layout[1],
         );
 
+        let line = match self.full {
+            true => Line::from(format!(" <j/k> scroll | <{}/{}> ", self.current, self.total_entries))
+                .right_aligned(),
+            false => Line::from(format!(" <j> download full article | <{}/{}> ", self.current, self.total_entries))
+                .right_aligned(),
+        };
         let rendered = render_markdown(&self.content, &MarkdownStyle::default(), area.width);
         self.total_lines = rendered.lines.len();
         frame.render_widget(
@@ -97,8 +103,7 @@ impl App {
                             Span::from(" ".to_string() + &self.feed_name.clone() + " "),
                         ]))
                         .title_bottom(
-                            Line::from(format!(" <{}/{}> ", self.current, self.total_entries))
-                                .right_aligned(),
+                            line
                         )
                         .borders(Borders::ALL)
                         .border_style(Style::default().fg(Color::Magenta))
@@ -139,6 +144,12 @@ impl App {
                     let rt = tokio::runtime::Runtime::new().unwrap();
                     self.content = rt.block_on(crate::rss::get(&self.url.clone()));
                     self.full = true;
+                }
+                KeyCode::Char('j') if self.full => {
+                    self.vertical_scroll += 1;
+                }
+                KeyCode::Char('k') if self.full => {
+                    self.vertical_scroll -= 1;
                 }
                 _ => (),
             }
