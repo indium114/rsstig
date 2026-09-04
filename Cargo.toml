@@ -2,6 +2,10 @@
 name = "rsstig"
 version = "0.1.0"
 edition = "2024"
+description = "An unconventional terminal RSS/Atom reader"
+license = "Unlicense"
+repository = "https://github.com/indium114/rsstig"
+homepage = "https://github.com/indium114/rsstig"
 
 [dependencies]
 color-eyre = "0.6.5"
@@ -13,6 +17,5 @@ markdowndown = "0.1.0"
 opml = "1.1.6"
 ratatui = "0.30.2"
 reqwest = { version = "0.13.4", features = ["blocking"] }
-serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"
 tokio = { version = "1.53.1", features = ["full"] }
