@@ -70,7 +70,7 @@ impl App {
     fn draw(&mut self, frame: &mut Frame) {
         let area = frame
             .area()
-            .centered(Constraint::Percentage(80), Constraint::Percentage(60));
+            .centered(Constraint::Percentage(85), Constraint::Percentage(75));
         let master_layout = Layout::default()
             .direction(Direction::Horizontal)
             .constraints(vec![Constraint::Percentage(100), Constraint::Length(4)])
