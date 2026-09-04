@@ -40,6 +40,10 @@
 
         packages.rsstig = naersk'.buildPackage {
           src = ./.;
+
+          nativeBuildInputs = [
+            pkgs.perl
+          ];
         };
 
         apps.rsstig = {
