@@ -8,7 +8,13 @@ fn main() -> Result<()> {
 
     for feed in opml::load_feeds() {
         println!("== Feed: {}", feed.text);
-        println!("{:#?}", rss::get_rss(feed.xml_url.expect(&format!("Feed {} does not have an xmlUrl", feed.text).to_string())));
+        println!(
+            "{:#?}",
+            rss::get_rss(
+                feed.xml_url
+                    .expect(&format!("Feed {} does not have an xmlUrl", feed.text).to_string())
+            )
+        );
     }
 
     Ok(())
