@@ -3,6 +3,7 @@ use indicatif::{ProgressBar, ProgressState, ProgressStyle};
 use std::{fmt::Write, time::Duration};
 
 mod opml;
+mod persistence;
 mod rss;
 mod tui;
 
@@ -56,8 +57,18 @@ fn main() -> Result<()> {
     // MARK: run ui
     'top: for feed in feeds {
         for (i, entry) in feed.entries.clone().into_iter().enumerate() {
-            match tui::run(feed.name.clone(), entry, i, feed.entries.len()) {
-                true => continue,
+            let mut read_entries: Vec<String> = persistence::load_persistence();
+
+            if read_entries.contains(&entry.id.clone()) {
+                continue
+            }
+
+            match tui::run(feed.name.clone(), entry.clone(), i, feed.entries.len()) {
+                true => {
+                    read_entries.push(entry.id.clone());
+                    persistence::save_persistence(read_entries);
+                    continue
+                },
                 false => break 'top,
             }
         }
