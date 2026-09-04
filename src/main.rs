@@ -1,5 +1,5 @@
 use color_eyre::eyre::Result;
-use indicatif::{ProgressBar, ProgressStyle, ProgressState};
+use indicatif::{ProgressBar, ProgressState, ProgressStyle};
 use std::{fmt::Write, time::Duration};
 
 mod opml;
@@ -26,10 +26,16 @@ fn main() -> Result<()> {
 
     let bar = ProgressBar::new(feed_files.len() as u64);
     bar.enable_steady_tick(Duration::from_millis(120));
-    bar.set_style(ProgressStyle::with_template("{spinner:.green} Fetching feeds [{elapsed_precise}] [{wide_bar:.white}] ({eta})")
+    bar.set_style(
+        ProgressStyle::with_template(
+            "{spinner:.green} Fetching feeds [{elapsed_precise}] [{wide_bar:.white}] ({eta})",
+        )
         .unwrap()
-        .with_key("eta", |state: &ProgressState, w: &mut dyn Write| write!(w, "{:.1}s", state.eta().as_secs_f64()).unwrap())
-        .progress_chars("#>-"));
+        .with_key("eta", |state: &ProgressState, w: &mut dyn Write| {
+            write!(w, "{:.1}s", state.eta().as_secs_f64()).unwrap()
+        })
+        .progress_chars("#>-"),
+    );
 
     for feed in feed_files {
         feeds.push(Feed {

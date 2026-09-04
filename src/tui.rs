@@ -1,21 +1,25 @@
-use limner::{render_markdown, MarkdownStyle};
+use limner::{MarkdownStyle, render_markdown};
 use ratatui::{
-    border,
-  DefaultTerminal, Frame,
-  crossterm::event::{self, Event, KeyCode, KeyEventKind},
-  layout::{Constraint, Direction, Layout},
-  prelude::*,
-  style::{Color, Style},
-  text::{Line, Span},
-  widgets::{Block, BorderType, Borders, Paragraph, Wrap, Scrollbar, ScrollbarOrientation, ScrollbarState},
+    DefaultTerminal, Frame, border,
+    crossterm::event::{self, Event, KeyCode, KeyEventKind},
+    layout::{Constraint, Direction, Layout},
+    prelude::*,
+    style::{Color, Style},
+    text::{Line, Span},
+    widgets::{
+        Block, BorderType, Borders, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState,
+        Wrap,
+    },
 };
 
 pub fn run(name: String, entry: crate::rss::Entry, current: usize, total_entries: usize) -> bool {
     let mut app = App::new(name, entry, current, total_entries);
-    ratatui::run(|terminal| if !app.run(terminal) {
-        return false;
-    } else {
-        return true;
+    ratatui::run(|terminal| {
+        if !app.run(terminal) {
+            return false;
+        } else {
+            return true;
+        }
     })
 }
 
@@ -29,7 +33,7 @@ struct App {
     current: usize,
     total_entries: usize,
     vertical_scroll: u16,
-    total_lines: usize
+    total_lines: usize,
 }
 
 impl App {
@@ -73,14 +77,13 @@ impl App {
             .split(area);
 
         frame.render_widget(
-            Paragraph::new("<l>")
-                .block(
-                    Block::default()
-                        .borders(border!(TOP, RIGHT, BOTTOM))
-                        .border_style(Style::default().fg(Color::Gray))
-                        .border_type(BorderType::Double)
-                ),
-            master_layout[1]
+            Paragraph::new("<l>").block(
+                Block::default()
+                    .borders(border!(TOP, RIGHT, BOTTOM))
+                    .border_style(Style::default().fg(Color::Gray))
+                    .border_type(BorderType::Double),
+            ),
+            master_layout[1],
         );
 
         let rendered = render_markdown(&self.content, &MarkdownStyle::default(), area.width);
@@ -89,37 +92,36 @@ impl App {
             Paragraph::new(rendered.lines)
                 .block(
                     Block::default()
-                        .title_top(
-                            Line::from(vec![
-                                Span::from(" ".to_string() + &self.entry_name.clone() + " |"),
-                                Span::from(" ".to_string() + &self.feed_name.clone() + " "),
-                            ])
-                        )
+                        .title_top(Line::from(vec![
+                            Span::from(" ".to_string() + &self.entry_name.clone() + " |"),
+                            Span::from(" ".to_string() + &self.feed_name.clone() + " "),
+                        ]))
                         .title_bottom(
-                            Line::from(format!(" <{}/{}> ", self.current, self.total_entries)).right_aligned()
+                            Line::from(format!(" <{}/{}> ", self.current, self.total_entries))
+                                .right_aligned(),
                         )
                         .borders(Borders::ALL)
                         .border_style(Style::default().fg(Color::Magenta))
-                        .border_type(BorderType::Double)
+                        .border_type(BorderType::Double),
                 )
                 .wrap(Wrap { trim: false })
                 .scroll((self.vertical_scroll, 0)),
-            master_layout[0]
+            master_layout[0],
         );
 
         // scrollbar
         let scrollbar = Scrollbar::new(ScrollbarOrientation::VerticalRight)
             .begin_symbol(Some("󱦲"))
             .end_symbol(Some("󱦳"));
-        let mut scrollbar_state = ScrollbarState::new(self.total_lines)
-            .position(self.vertical_scroll as usize);
+        let mut scrollbar_state =
+            ScrollbarState::new(self.total_lines).position(self.vertical_scroll as usize);
         frame.render_stateful_widget(
             scrollbar,
             master_layout[0].inner(Margin {
                 vertical: 1,
                 horizontal: 0,
             }),
-            &mut scrollbar_state
+            &mut scrollbar_state,
         )
     }
 
