@@ -61,15 +61,15 @@ fn main() -> Result<()> {
             let mut read_entries: Vec<String> = persistence::load_persistence();
 
             if read_entries.contains(&entry.id.clone()) {
-                continue
+                continue;
             }
 
             match tui::run(feed.name.clone(), entry.clone(), i, feed.entries.len()) {
                 true => {
                     read_entries.push(entry.id.clone());
                     persistence::save_persistence(read_entries);
-                    continue
-                },
+                    continue;
+                }
                 false => break 'top,
             }
         }

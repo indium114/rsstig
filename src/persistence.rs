@@ -25,7 +25,7 @@ pub fn save_persistence(read_entries: Vec<String>) -> bool {
                 let _ = fs::create_dir_all(parent);
             }
             fs::write(&path, json).is_ok()
-        },
+        }
         Err(_) => false,
     }
 }

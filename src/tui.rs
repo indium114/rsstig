@@ -87,10 +87,16 @@ impl App {
         );
 
         let line = match self.full {
-            true => Line::from(format!(" <j/k> scroll | <o> read later | <{}/{}> ", self.current, self.total_entries))
-                .right_aligned(),
-            false => Line::from(format!(" <j> download full article | <o> read later | <{}/{}> ", self.current, self.total_entries))
-                .right_aligned(),
+            true => Line::from(format!(
+                " <j/k> scroll | <o> read later | <{}/{}> ",
+                self.current, self.total_entries
+            ))
+            .right_aligned(),
+            false => Line::from(format!(
+                " <j> download full article | <o> read later | <{}/{}> ",
+                self.current, self.total_entries
+            ))
+            .right_aligned(),
         };
         let rendered = render_markdown(&self.content, &MarkdownStyle::default(), area.width);
         self.total_lines = rendered.lines.len();
@@ -102,9 +108,7 @@ impl App {
                             Span::from(" ".to_string() + &self.entry_name.clone() + " |"),
                             Span::from(" ".to_string() + &self.feed_name.clone() + " "),
                         ]))
-                        .title_bottom(
-                            line
-                        )
+                        .title_bottom(line)
                         .borders(Borders::ALL)
                         .border_style(Style::default().fg(Color::Magenta))
                         .border_type(BorderType::Double),
@@ -152,10 +156,14 @@ impl App {
                     self.vertical_scroll -= 1;
                 }
                 KeyCode::Char('o') => {
-                    crate::linkding::bookmark(self.url.clone(), self.entry_name.clone(), match self.full {
-                        true => self.entry_name.clone(),
-                        false => self.content.clone(),
-                    });
+                    crate::linkding::bookmark(
+                        self.url.clone(),
+                        self.entry_name.clone(),
+                        match self.full {
+                            true => self.entry_name.clone(),
+                            false => self.content.clone(),
+                        },
+                    );
                     self.running = false;
                 }
                 _ => (),
