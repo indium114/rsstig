@@ -2667,7 +2667,7 @@ dependencies = [
 
 [[package]]
 name = "rsstig"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "color-eyre",
  "dirs",
@@ -2679,6 +2679,7 @@ dependencies = [
  "opml",
  "ratatui",
  "reqwest 0.13.5",
+ "serde",
  "serde_json",
  "tokio",
  "toml 1.1.6+spec-1.1.0",
