@@ -2671,6 +2671,7 @@ dependencies = [
  "opml",
  "ratatui",
  "reqwest 0.13.4",
+ "serde",
  "serde_json",
  "tokio",
  "toml 1.1.6+spec-1.1.0",
