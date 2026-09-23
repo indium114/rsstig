@@ -87,9 +87,9 @@ impl App {
         );
 
         let line = match self.full {
-            true => Line::from(format!(" <j/k> scroll | <{}/{}> ", self.current, self.total_entries))
+            true => Line::from(format!(" <j/k> scroll | <o> read later | <{}/{}> ", self.current, self.total_entries))
                 .right_aligned(),
-            false => Line::from(format!(" <j> download full article | <{}/{}> ", self.current, self.total_entries))
+            false => Line::from(format!(" <j> download full article | <o> read later | <{}/{}> ", self.current, self.total_entries))
                 .right_aligned(),
         };
         let rendered = render_markdown(&self.content, &MarkdownStyle::default(), area.width);
@@ -150,6 +150,13 @@ impl App {
                 }
                 KeyCode::Char('k') if self.full => {
                     self.vertical_scroll -= 1;
+                }
+                KeyCode::Char('o') => {
+                    crate::linkding::bookmark(self.url.clone(), self.entry_name.clone(), match self.full {
+                        true => self.entry_name.clone(),
+                        false => self.content.clone(),
+                    });
+                    self.running = false;
                 }
                 _ => (),
             }

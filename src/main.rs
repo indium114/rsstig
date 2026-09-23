@@ -2,6 +2,7 @@ use color_eyre::eyre::Result;
 use indicatif::{ProgressBar, ProgressState, ProgressStyle};
 use std::{fmt::Write, io, time::Duration};
 
+mod linkding;
 mod opml;
 mod persistence;
 mod rss;
