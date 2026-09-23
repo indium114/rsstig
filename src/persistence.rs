@@ -14,7 +14,7 @@ pub fn load_persistence() -> Vec<String> {
     fs::read_to_string(persistence_file())
         .ok()
         .and_then(|s| serde_json::from_str(&s).ok())
-        .unwrap_or(Vec::new())
+        .unwrap_or_default()
 }
 
 pub fn save_persistence(read_entries: Vec<String>) -> bool {
@@ -25,7 +25,7 @@ pub fn save_persistence(read_entries: Vec<String>) -> bool {
                 let _ = fs::create_dir_all(parent);
             }
             fs::write(&path, json).is_ok()
-        },
+        }
         Err(_) => false,
     }
 }

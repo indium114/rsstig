@@ -1,6 +1,6 @@
 [package]
 name = "rsstig"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 description = "An unconventional terminal RSS/Atom reader"
 license = "Unlicense"
@@ -17,6 +17,8 @@ markdowndown = "0.1.0"
 openssl-sys = { version = "0.9.117", features = ["vendored"] }
 opml = "1.1.6"
 ratatui = "0.30.2"
-reqwest = { version = "0.13.4", features = ["blocking"] }
+reqwest = { version = "0.13.4", features = ["blocking", "json"] }
+serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"
 tokio = { version = "1.53.1", features = ["full"] }
+toml = "1.1.6"

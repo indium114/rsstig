@@ -102,6 +102,20 @@ Here's an example with the *LTT Labs* feed from earlier, as well as the Rust Blo
 
 I took this approach because I wanted to be able to have all of my feeds in a single file managed with home-manager.
 
+### Setting up [linkding](https://linkding.link) integration
+
+rsstig supports integration with [linkding](https://linkding.link), allowing you to save articles to read later by bookmarking them on a Linkding instance.
+
+To configure this, edit `~/.config/rsstig/credentials.toml`:
+
+```toml
+url = "https://example.com" # replace with the url to your Linkding instance
+token = "0000000000000000000000000000000000000000" # replace with your access token
+# you can generate a token from Linkding Settings > Integrations > REST API > Generate API token
+```
+
+Then, in rsstig, you can press `o` to save it to your Linkding instance to read later.
+
 ## Inspirations
 
 - [bulletty](https://github.com/crocidb/bulletty)
