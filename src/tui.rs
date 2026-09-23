@@ -15,11 +15,7 @@ use ratatui::{
 pub fn run(name: String, entry: crate::rss::Entry, current: usize, total_entries: usize) -> bool {
     let mut app = App::new(name, entry, current, total_entries);
     ratatui::run(|terminal| {
-        if !app.run(terminal) {
-            return false;
-        } else {
-            return true;
-        }
+        app.run(terminal)
     })
 }
 
@@ -64,7 +60,7 @@ impl App {
             }
         }
 
-        return true;
+        true
     }
 
     fn draw(&mut self, frame: &mut Frame) {
