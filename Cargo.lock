@@ -1607,9 +1607,9 @@ dependencies = [
 
 [[package]]
 name = "limner"
-version = "0.5.0"
+version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2bc19b6246b247d5ca4dcf80e9d808c3b8358730eeb2924daf3e7df70ecec221"
+checksum = "328bc3e0b8f773f55a125a4968fdd483850c96fcae5c20bb6bca1dc4366dc475"
 dependencies = [
  "pulldown-cmark",
  "ratatui",
