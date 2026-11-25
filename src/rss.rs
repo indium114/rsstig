@@ -13,10 +13,9 @@ pub async fn get(url: &str) -> String {
     convert_url(url).await.unwrap().to_string()
 }
 
-pub fn get_rss(url: String) -> Vec<Entry> {
-    let feed = reqwest::blocking::get(&url).unwrap().text().unwrap();
-    parser::parse(feed.as_bytes())
-        .unwrap()
+pub fn get_rss(url: String) -> Result<Vec<Entry>, anyhow::Error> {
+    let feed = reqwest::blocking::get(&url)?.text()?;
+    let result = parser::parse(feed.as_bytes())?
         .entries
         .into_iter()
         .map(|e| Entry {
@@ -31,5 +30,7 @@ pub fn get_rss(url: String) -> Vec<Entry> {
             },
             url: e.links[0].href.clone(),
         })
-        .collect()
+        .collect();
+
+    Ok(result)
 }
