@@ -25,11 +25,8 @@ struct Bookmark {
 fn load_credentials() -> Result<Credentials, anyhow::Error> {
     let dir = crate::persistence::home() + "/.config/rsstig/credentials.toml";
     let file =
-        fs::read_to_string(&dir).with_context(|| format!("credentials.toml does not exist or is inaccessible"))?;
-    match toml::from_str(&file).with_context(|| format!("failed to parse credentials.toml")) {
-        Ok(c) => return Ok(c),
-        Err(e) => return Err(e),
-    }
+        fs::read_to_string(&dir).with_context(|| "credentials.toml does not exist or is inaccessible".to_string())?;
+    toml::from_str(&file).with_context(|| "failed to parse credentials.toml".to_string())
 }
 
 pub fn bookmark(url: String, title: String, description: String) -> Result<(), anyhow::Error> {
