@@ -1,8 +1,8 @@
 /// integration for [linkding]
 /// [linkding]: https://linkding.link
+use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 use std::fs;
-use anyhow::{Context, Result};
 
 #[derive(Deserialize)]
 struct Credentials {
@@ -24,8 +24,8 @@ struct Bookmark {
 
 fn load_credentials() -> Result<Credentials, anyhow::Error> {
     let dir = crate::persistence::home() + "/.config/rsstig/credentials.toml";
-    let file =
-        fs::read_to_string(&dir).with_context(|| "credentials.toml does not exist or is inaccessible".to_string())?;
+    let file = fs::read_to_string(&dir)
+        .with_context(|| "credentials.toml does not exist or is inaccessible".to_string())?;
     toml::from_str(&file).with_context(|| "failed to parse credentials.toml".to_string())
 }
 

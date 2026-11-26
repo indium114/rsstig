@@ -15,9 +15,7 @@ use ratatui_notifications::{Level, Notification, Notifications};
 
 pub fn run(name: String, entry: crate::rss::Entry, current: usize, total_entries: usize) -> bool {
     let mut app = App::new(name, entry, current, total_entries);
-    ratatui::run(|terminal| {
-        app.run(terminal)
-    })
+    ratatui::run(|terminal| app.run(terminal))
 }
 
 struct App {
@@ -133,7 +131,8 @@ impl App {
         );
 
         // notifs
-        self.notifications.tick(std::time::Duration::from_millis(16));
+        self.notifications
+            .tick(std::time::Duration::from_millis(16));
         self.notifications.render(frame, frame.area());
     }
 
@@ -179,15 +178,21 @@ impl App {
                             println!("saved article {} to linkding", self.entry_name.clone());
                         }
                         Err(e) => {
-                            let notif = Notification::new(format!("Failed to save article due to error: {e}"))
-                                .title(" Failed")
-                                .level(Level::Error)
-                                .build()
-                                .unwrap();
+                            let notif = Notification::new(format!(
+                                "Failed to save article due to error: {e}"
+                            ))
+                            .title(" Failed")
+                            .level(Level::Error)
+                            .build()
+                            .unwrap();
 
                             self.notifications.add(notif).unwrap();
 
-                            println!("failed to save article {} to linkding due to: {}", self.entry_name.clone(), e);
+                            println!(
+                                "failed to save article {} to linkding due to: {}",
+                                self.entry_name.clone(),
+                                e
+                            );
                         }
                     }
                     std::thread::sleep(std::time::Duration::from_secs(1));
