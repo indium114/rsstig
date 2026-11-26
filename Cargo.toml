@@ -8,6 +8,7 @@ repository = "https://github.com/indium114/rsstig"
 homepage = "https://github.com/indium114/rsstig"
 
 [dependencies]
+anyhow = "1.0.105"
 color-eyre = "0.6.5"
 dirs = "7.0.0"
 feed-rs = "3.0.0"
