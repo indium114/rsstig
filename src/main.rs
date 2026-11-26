@@ -42,12 +42,18 @@ fn main() -> Result<()> {
     for feed in feed_files {
         feeds.push(Feed {
             name: feed.text.clone(),
-            entries: rss::get_rss(feed.xml_url.unwrap_or_else(|| {
+            entries: match rss::get_rss(feed.xml_url.unwrap_or_else(|| {
                 panic!(
                     "{}",
                     format!("Feed {} does not have an xmlUrl", feed.text).to_string()
                 )
-            })),
+            })) {
+                Ok(e) => e,
+                Err(_) => {
+                    println!("! Failed to fetch feed {}", feed.text.clone());
+                    continue;
+                }
+            },
         });
 
         bar.inc(1);

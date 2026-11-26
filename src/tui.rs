@@ -11,12 +11,11 @@ use ratatui::{
         Wrap,
     },
 };
+use ratatui_notifications::{Level, Notification, Notifications};
 
 pub fn run(name: String, entry: crate::rss::Entry, current: usize, total_entries: usize) -> bool {
     let mut app = App::new(name, entry, current, total_entries);
-    ratatui::run(|terminal| {
-        app.run(terminal)
-    })
+    ratatui::run(|terminal| app.run(terminal))
 }
 
 struct App {
@@ -30,6 +29,7 @@ struct App {
     total_entries: usize,
     vertical_scroll: u16,
     total_lines: usize,
+    notifications: Notifications,
 }
 
 impl App {
@@ -45,6 +45,7 @@ impl App {
             total_entries,
             vertical_scroll: 0,
             total_lines: 0,
+            notifications: Notifications::new(),
         }
     }
 
@@ -127,7 +128,12 @@ impl App {
                 horizontal: 0,
             }),
             &mut scrollbar_state,
-        )
+        );
+
+        // notifs
+        self.notifications
+            .tick(std::time::Duration::from_millis(16));
+        self.notifications.render(frame, frame.area());
     }
 
     fn keybinds(&mut self) -> bool {
@@ -152,14 +158,44 @@ impl App {
                     self.vertical_scroll -= 1;
                 }
                 KeyCode::Char('o') => {
-                    crate::linkding::bookmark(
+                    match crate::linkding::bookmark(
                         self.url.clone(),
                         self.entry_name.clone(),
                         match self.full {
                             true => self.entry_name.clone(),
                             false => self.content.clone(),
                         },
-                    );
+                    ) {
+                        Ok(_) => {
+                            let notif = Notification::new("Article saved to Linkding successfully")
+                                .title(" Saved")
+                                .level(Level::Info)
+                                .build()
+                                .unwrap();
+
+                            self.notifications.add(notif).unwrap();
+
+                            println!("saved article {} to linkding", self.entry_name.clone());
+                        }
+                        Err(e) => {
+                            let notif = Notification::new(format!(
+                                "Failed to save article due to error: {e}"
+                            ))
+                            .title(" Failed")
+                            .level(Level::Error)
+                            .build()
+                            .unwrap();
+
+                            self.notifications.add(notif).unwrap();
+
+                            println!(
+                                "failed to save article {} to linkding due to: {}",
+                                self.entry_name.clone(),
+                                e
+                            );
+                        }
+                    }
+                    std::thread::sleep(std::time::Duration::from_secs(1));
                     self.running = false;
                 }
                 _ => (),

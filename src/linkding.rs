@@ -1,5 +1,6 @@
 /// integration for [linkding]
 /// [linkding]: https://linkding.link
+use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 use std::fs;
 
@@ -21,15 +22,15 @@ struct Bookmark {
     tag_names: Vec<String>,
 }
 
-fn load_credentials() -> Credentials {
+fn load_credentials() -> Result<Credentials, anyhow::Error> {
     let dir = crate::persistence::home() + "/.config/rsstig/credentials.toml";
-    let file =
-        fs::read_to_string(&dir).unwrap_or_else(|_| panic!("Failed to read {dir}, make sure it exists"));
-    toml::from_str(&file).unwrap_or_else(|_| panic!("Failed to read {dir}, make sure it is valid TOML with a 'url' field, a 'username' field, and a 'token' field"))
+    let file = fs::read_to_string(&dir)
+        .with_context(|| "credentials.toml does not exist or is inaccessible".to_string())?;
+    toml::from_str(&file).with_context(|| "failed to parse credentials.toml".to_string())
 }
 
-pub fn bookmark(url: String, title: String, description: String) {
-    let credentials = load_credentials();
+pub fn bookmark(url: String, title: String, description: String) -> Result<(), anyhow::Error> {
+    let credentials = load_credentials()?;
     let bookmark = Bookmark {
         url,
         title,
@@ -46,6 +47,7 @@ pub fn bookmark(url: String, title: String, description: String) {
         .post(format!("{}/api/bookmarks/", credentials.url))
         .header("Authorization", format!("Token {}", credentials.token))
         .json(&bookmark)
-        .send()
-        .unwrap();
+        .send()?;
+
+    Ok(())
 }
